@@ -1,0 +1,31 @@
+version: v1.1.0
+steps:
+  - id: build-baskeptapi
+    build: -t $Registry/eshopondapr/basket.api:$Commit -f src/Services/Basket/Basket.API/Dockerfile .
+    cache: enabled
+  - id: build-blazorclient
+    build: -t $Registry/eshopondapr/blazor.client:$Commit -f src/Web/BlazorClient.Host/Dockerfile .
+    cache: enabled
+  - id: build-catalogapi
+    build: -t $Registry/eshopondapr/catalog.api:$Commit -f src/Services/Catalog/Catalog.API/Dockerfile .
+    cache: enabled
+  - id: build-identityapi
+    build: -t $Registry/eshopondapr/identity.api:$Commit -f src/Services/Identity/Identity.API/Dockerfile .
+    cache: enabled
+  - id: build-orderingapi
+    build: -t $Registry/eshopondapr/ordering.api:$Commit -f src/Services/Ordering/Ordering.API/Dockerfile .
+    cache: enabled
+  - id: build-paymentapi
+    build: -t $Registry/eshopondapr/payment.api:$Commit -f src/Services/Payment/Payment.API/Dockerfile .
+    cache: enabled
+  - id: build-webshoppingagg
+    build: -t $Registry/eshopondapr/webshoppingagg:$Commit -f src/ApiGateways/Aggregators/Web.Shopping.HttpAggregator/Dockerfile .
+    cache: enabled
+  - push:
+      - "$Registry/eshopondapr/basket.api:$Commit"
+      - "$Registry/eshopondapr/blazor.client:$Commit"
+      - "$Registry/eshopondapr/catalog.api:$Commit"
+      - "$Registry/eshopondapr/identity.api:$Commit"
+      - "$Registry/eshopondapr/ordering.api:$Commit"
+      - "$Registry/eshopondapr/payment.api:$Commit"
+      - "$Registry/eshopondapr/webshoppingagg:$Commit"
