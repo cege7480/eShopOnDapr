@@ -3,9 +3,15 @@ ARG NET_IMAGE=6.0-bullseye-slim
 FROM mcr.microsoft.com/dotnet/aspnet:${NET_IMAGE} AS base
 WORKDIR /app
 EXPOSE 80
+RUN apt-get update && apt-get install wget curl -y
+RUN wget 'http://pki.coyote.com/trust/zscaler.cer' -O '/usr/local/share/ca-certificates/zscaler.crt'
+RUN chmod 644 /usr/local/share/ca-certificates/zscaler.crt && update-ca-certificates
 
 FROM mcr.microsoft.com/dotnet/sdk:${NET_IMAGE} AS build
 WORKDIR /src
+RUN apt-get update && apt-get install wget curl -y
+RUN wget 'http://pki.coyote.com/trust/zscaler.cer' -O '/usr/local/share/ca-certificates/zscaler.crt'
+RUN chmod 644 /usr/local/share/ca-certificates/zscaler.crt && update-ca-certificates
 
 # Create this "restore-solution" section by running ./Create-DockerfileSolutionRestore.ps1, to optimize build cache reuse
 COPY ["src/ApiGateways/Aggregators/Web.Shopping.HttpAggregator/Web.Shopping.HttpAggregator.csproj", "src/ApiGateways/Aggregators/Web.Shopping.HttpAggregator/"]
